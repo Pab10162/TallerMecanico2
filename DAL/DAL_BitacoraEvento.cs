@@ -13,7 +13,7 @@ namespace DAL
 {
     public class DAL_BitacoraEvento
     {
-
+        Mapper_Bitacora mapper = new Mapper_Bitacora();
         public void RegistrarEvento(BE_BitacoraEvento evento)
         {
             string query = "INSERT INTO BitacoraEventos(Fecha, Horario, DNI_Usuario, Evento) VALUES (@Fecha, @Horario, @DNI_Usuario, @Evento)";
@@ -52,7 +52,7 @@ namespace DAL
                 string dniUsuario = fila["DNI_Usuario"].ToString();
                 Be_Usuario UsuariDNI = usuarioDAL.ObtenerPorDNI(dniUsuario);
 
-                listaEventos.Add(fila, UsuariDNI);
+                listaEventos.Add(mapper.ToBE(fila, UsuariDNI));
             }
             return listaEventos;
         }

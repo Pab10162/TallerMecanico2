@@ -24,5 +24,10 @@ namespace BLL
             dal.CrearTurno(turno);
             turnoCreado?.Invoke(turno, SessionManager.GetInstance().UsuarioActual);
         }
+
+        public List<BE_Turno> ObtenerTurnos()
+        {
+            return dal.obtenerTurnos();
+        }
     }
 }

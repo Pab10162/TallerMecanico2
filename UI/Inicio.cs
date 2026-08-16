@@ -85,5 +85,13 @@ namespace UI
             frmVehiculos.WindowState = FormWindowState.Maximized;
             frmVehiculos.Show();
         }
+
+        private void turnosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form_Turnos frmTurnos = new Form_Turnos();
+            frmTurnos.MdiParent = this;
+            frmTurnos.WindowState = FormWindowState.Maximized;
+            frmTurnos.Show();
+        }
     }
 }

@@ -66,6 +66,12 @@
     <Compile Include="Formularios Hijos\Form_ABMUsuario.Designer.cs">
       <DependentUpon>Form_ABMUsuario.cs</DependentUpon>
     </Compile>
+    <Compile Include="Formularios Hijos\Form_Turnos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios Hijos\Form_Turnos.Designer.cs">
+      <DependentUpon>Form_Turnos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Inicio.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +94,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios Hijos\Form_ABMUsuario.resx">
       <DependentUpon>Form_ABMUsuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios Hijos\Form_Turnos.resx">
+      <DependentUpon>Form_Turnos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Inicio.resx">
       <DependentUpon>Inicio.cs</DependentUpon>

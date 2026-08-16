@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mapper
 {
-    public class Mapper_Bitacora //Prueba
+    public class Mapper_Bitacora 
     {
         public BE_BitacoraEvento ToBE(DataRow fila, Be_Usuario usuario)
         {

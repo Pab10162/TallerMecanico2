@@ -22,5 +22,10 @@ namespace BE
             Cliente = cliente;
         }
         public BE_Vehiculo(){}
+
+        public override string ToString()
+        {
+            return $"{Patente} - {Marca} - {Modelo}";
+        }
     }
 }
