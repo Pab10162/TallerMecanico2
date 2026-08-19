@@ -11,9 +11,7 @@ namespace BLL
     public class BLL_Turno
     {
         public DAL_Turno dal = new DAL_Turno();
-        public delegate void TurnoCreadoHandler(BE_Turno turno, Be_Usuario usuario);
-
-        public event TurnoCreadoHandler turnoCreado;
+        public event AccionRealizadaHandler accionRealizada;
 
         public void CrearTurno(BE_Turno turno)
         {
@@ -22,7 +20,7 @@ namespace BLL
                 throw new Exception("No puede crearse un turno con una fecha pasada");
             }
             dal.CrearTurno(turno);
-            turnoCreado?.Invoke(turno, SessionManager.GetInstance().UsuarioActual);
+            accionRealizada?.Invoke($"Se creó el turno para {turno.Cliente.Nombre}", SessionManager.GetInstance().UsuarioActual);
         }
 
         public List<BE_Turno> ObtenerTurnos()

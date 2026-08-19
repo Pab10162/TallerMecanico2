@@ -21,6 +21,12 @@ namespace UI
         {
             InitializeComponent();
         }
+        BLL_Usuario usuariobll = new BLL_Usuario();
+        BLL_Cliente clientebll = new BLL_Cliente();
+        BLL_Vehiculo vehiculobll = new BLL_Vehiculo();
+        BLL_Turno turnobll = new BLL_Turno();
+        BLL_Bitacora bitacorabll = new BLL_Bitacora();
+
     private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             
@@ -34,6 +40,7 @@ namespace UI
             clientesToolStripMenuItem.Visible = usuario is Be_Administrador || usuario is Be_Recepcionista;
             diagnosticoToolStripMenuItem.Visible = usuario is Be_Administrador || usuario is Be_Mecanico || usuario is Be_JefeTaller;
             cobrosToolStripMenuItem.Visible = usuario is Be_Administrador || usuario is Be_Cajero;
+            usuariobll.accionRealizada += RegistrarEnBitacora;
         }
         public void CargarMenu()
         {
