@@ -1,4 +1,9 @@
-﻿using System;
+﻿using BE;
+using BE.Clases;
+using BE.SubClases;
+using BLL;
+using Servicios;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,10 +12,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BE;
-using BE.SubClases;
-using BLL;
-using Servicios;
 using UI.Formularios_Hijos;
 
 namespace UI
@@ -41,6 +42,14 @@ namespace UI
             diagnosticoToolStripMenuItem.Visible = usuario is Be_Administrador || usuario is Be_Mecanico || usuario is Be_JefeTaller;
             cobrosToolStripMenuItem.Visible = usuario is Be_Administrador || usuario is Be_Cajero;
             usuariobll.accionRealizada += RegistrarEnBitacora;
+            clientebll.accionRealizada += RegistrarEnBitacora;
+            vehiculobll.accionRealizada += RegistrarEnBitacora;
+            turnobll.accionRealizada += RegistrarEnBitacora;
+        }
+        private void RegistrarEnBitacora(string descripcion, Be_Usuario usuario)
+        {
+            BE_BitacoraEvento evento = new BE_BitacoraEvento(DateTime.Now, DateTime.Now, usuario, descripcion);
+            bitacorabll.RegistrarEvento(evento);
         }
         public void CargarMenu()
         {
