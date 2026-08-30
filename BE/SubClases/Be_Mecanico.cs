@@ -16,5 +16,10 @@ namespace BE.SubClases
                            string nombre, string nombreUsuario, string idioma,
                            bool bloqueado, bool activo, string rol)
             : base(apellido, contraseña, dni, email, nombre, nombreUsuario, idioma, bloqueado, activo, rol) { }
+
+        public override string ToString()
+        {
+            return $"{DNI} - {Nombre}";
+        }
     }
 }

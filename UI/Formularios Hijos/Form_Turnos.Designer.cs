@@ -40,7 +40,6 @@
             this.dgvTurnos = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.listBox2 = new System.Windows.Forms.ListBox();
             this.dtpHorario = new System.Windows.Forms.DateTimePicker();
             this.dtpFecha = new System.Windows.Forms.DateTimePicker();
             this.cmbEstado = new System.Windows.Forms.ComboBox();
@@ -166,20 +165,11 @@
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(172, 207);
+            this.listBox1.Location = new System.Drawing.Point(317, 207);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(158, 95);
             this.listBox1.TabIndex = 91;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
-            // 
-            // listBox2
-            // 
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(336, 207);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(158, 95);
-            this.listBox2.TabIndex = 92;
-            this.listBox2.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
             // 
             // dtpHorario
             // 
@@ -226,7 +216,6 @@
             this.Controls.Add(this.cmbEstado);
             this.Controls.Add(this.dtpFecha);
             this.Controls.Add(this.dtpHorario);
-            this.Controls.Add(this.listBox2);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.labelModo);
             this.Controls.Add(this.btnSalir);
@@ -262,7 +251,6 @@
         private System.Windows.Forms.DataGridView dgvTurnos;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.DateTimePicker dtpHorario;
         private System.Windows.Forms.DateTimePicker dtpFecha;
         private System.Windows.Forms.ComboBox cmbEstado;

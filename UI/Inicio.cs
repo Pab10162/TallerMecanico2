@@ -36,6 +36,13 @@ namespace UI
         private void Inicio_Load(object sender, EventArgs e)
         {
             Be_Usuario usuario = SessionManager.GetInstance().UsuarioActual;
+            if (usuario == null)
+            {
+                unloginToolStripMenuItem.Enabled = false;
+                backupToolStripMenuItem.Enabled = false;
+                restoreToolStripMenuItem.Enabled = false;
+                cambiarContraseñaToolStripMenuItem.Enabled = false;
+            }
 
             administracionToolStripMenuItem.Visible = usuario is Be_Administrador;
             clientesToolStripMenuItem.Visible = usuario is Be_Administrador || usuario is Be_Recepcionista;
@@ -78,8 +85,7 @@ namespace UI
         private void unloginToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new BLL_Usuario().Logout();
-            CargarMenu(); // recarga el menú, ahora sin usuario activo
-                          // cerrar todos los formularios hijos abiertos
+            CargarMenu(); 
             foreach (Form hijo in this.MdiChildren)
             {
                 hijo.Close();
@@ -108,6 +114,21 @@ namespace UI
             frmTurnos.MdiParent = this;
             frmTurnos.WindowState = FormWindowState.Maximized;
             frmTurnos.Show();
+        }
+
+        private void backupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void restoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cambiarContraseñaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

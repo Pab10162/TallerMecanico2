@@ -14,8 +14,19 @@ using System.Xml.Linq;
 
 namespace DAL
 {
-    public class DAL_Cliente
+    public class DAL_Cliente : IDisposable
     {
+
+        private Mapper_Cliente mapper = new Mapper_Cliente();
+        private SqlConnection conexion;
+        private bool disposed = false;
+
+
+        public DAL_Cliente()
+        {
+            conexion = ConexionDB.ObtenerConexion();
+        }
+
         public void CrearCliente(BE_Cliente cliente)
         {
             string query = @"INSERT INTO Clientes 
@@ -30,23 +41,30 @@ namespace DAL
                 new SqlParameter(@"Telefono", cliente.Telefono),
                 new SqlParameter(@"Direccion", cliente.Direccion)
             };
-            using (SqlConnection conn = ConexionDB.ObtenerConexion())
+            AbrirSiCorresponde();
+            using (SqlTransaction tran = conexion.BeginTransaction())
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                try
                 {
-                    cmd.Parameters.AddRange(sp);
-                    cmd.ExecuteNonQuery();
+                    using (SqlCommand cmd = new SqlCommand(query, conexion, tran))
+                    {
+                        cmd.Parameters.AddRange(sp);
+                        cmd.ExecuteNonQuery();
+                    }
+                    tran.Commit();
+                }
+                catch
+                {
+                    tran.Rollback();
+                    throw;
                 }
             }
         }
-
-        private Mapper_Cliente mapper = new Mapper_Cliente();
-
+        
         public List<BE_Cliente> ObtenerClientes()
         {
-            List<BE_Cliente> listaCliente = new List<BE_Cliente>();
             string query = @"SELECT DNI, Nombre, Apellido, Telefono, Direccion FROM Clientes";
+            List<BE_Cliente> listaCliente = new List<BE_Cliente>();
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter(query, ConexionDB.ObtenerConexion());
             da.Fill(ds);
@@ -87,16 +105,77 @@ namespace DAL
                 new SqlParameter(@"Telefono", cliente.Telefono),
                 new SqlParameter(@"Direccion", cliente.Direccion)
             };
-
-            using (SqlConnection conn = ConexionDB.ObtenerConexion())
+            AbrirSiCorresponde();
+            using (SqlTransaction tran = conexion.BeginTransaction())
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                try
                 {
-                    cmd.Parameters.AddRange(sp);
-                    cmd.ExecuteNonQuery();
+                    using (SqlCommand cmd = new SqlCommand(query, conexion, tran))
+                    {
+                        cmd.Parameters.AddRange(sp);
+                        cmd.ExecuteNonQuery();
+                    }
+                    tran.Commit();
+                }
+                catch
+                {
+                    tran.Rollback();
+                    throw;
                 }
             }
+        }
+
+        public void EliminarCliente(BE_Cliente cliente)
+        {
+            string query = "UPDATE Clientes SET Activo = 0 WHERE DNI = @DNI";
+
+            AbrirSiCorresponde();
+            using (SqlTransaction tran = conexion.BeginTransaction())
+            {
+                try
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conexion, tran))
+                    {
+                        cmd.Parameters.AddWithValue("@DNI", cliente.DNI);
+                        cmd.ExecuteNonQuery();
+                    }
+                    tran.Commit();
+                }
+                catch
+                {
+                    tran.Rollback();
+                    throw;
+                }
+            }
+        }
+
+
+        private void AbrirSiCorresponde()
+        {
+            if (conexion.State != ConnectionState.Open)
+                conexion.Open();
+        }
+
+        // --- Patrón IDisposable ---
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed) return;
+
+            if (disposing)
+            {
+                conexion?.Close();
+                conexion?.Dispose();
+            }
+            disposed = true;
+        }
+        ~DAL_Cliente()
+        {
+            Dispose(false);
         }
     }
 }

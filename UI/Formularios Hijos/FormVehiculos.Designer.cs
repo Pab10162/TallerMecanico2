@@ -54,7 +54,7 @@
             // 
             this.labelModo.AutoSize = true;
             this.labelModo.Font = new System.Drawing.Font("Microsoft Sans Serif", 18.25F);
-            this.labelModo.Location = new System.Drawing.Point(387, 2);
+            this.labelModo.Location = new System.Drawing.Point(7, 330);
             this.labelModo.Name = "labelModo";
             this.labelModo.Size = new System.Drawing.Size(76, 29);
             this.labelModo.TabIndex = 87;
@@ -73,7 +73,7 @@
             // 
             // btnCancelar
             // 
-            this.btnCancelar.Location = new System.Drawing.Point(532, 154);
+            this.btnCancelar.Location = new System.Drawing.Point(532, 128);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(75, 26);
             this.btnCancelar.TabIndex = 85;
@@ -84,7 +84,7 @@
             // 
             // btnAplicar
             // 
-            this.btnAplicar.Location = new System.Drawing.Point(532, 122);
+            this.btnAplicar.Location = new System.Drawing.Point(532, 96);
             this.btnAplicar.Name = "btnAplicar";
             this.btnAplicar.Size = new System.Drawing.Size(75, 26);
             this.btnAplicar.TabIndex = 84;
@@ -132,7 +132,7 @@
             // 
             // btnModificar
             // 
-            this.btnModificar.Location = new System.Drawing.Point(532, 89);
+            this.btnModificar.Location = new System.Drawing.Point(532, 63);
             this.btnModificar.Name = "btnModificar";
             this.btnModificar.Size = new System.Drawing.Size(75, 23);
             this.btnModificar.TabIndex = 81;
@@ -150,7 +150,7 @@
             // 
             // btnCrear
             // 
-            this.btnCrear.Location = new System.Drawing.Point(532, 60);
+            this.btnCrear.Location = new System.Drawing.Point(532, 34);
             this.btnCrear.Name = "btnCrear";
             this.btnCrear.Size = new System.Drawing.Size(75, 23);
             this.btnCrear.TabIndex = 80;

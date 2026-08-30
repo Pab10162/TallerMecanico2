@@ -25,7 +25,7 @@ namespace UI.Formularios_Hijos
         public void ActualizarGrilla()
         {
             dgvClientes.DataSource = null;
-            dgvClientes.DataSource = BLLCLiente.obtenerClientes();
+            dgvClientes.DataSource = BLLCLiente.ObtenerTodos();
         }
 
         private void btnCrear_Click(object sender, EventArgs e)
@@ -58,7 +58,7 @@ namespace UI.Formularios_Hijos
                     }
 
                     BE_Cliente clienteNuevo = new BE_Cliente(dni, nombre, apellido, telefono, direccion);
-                    BLLCLiente.CrearCliente(clienteNuevo);
+                    BLLCLiente.Alta(clienteNuevo);
                     MessageBox.Show("Cliente registrado correctamente");
                     ActualizarGrilla();
 
@@ -71,7 +71,7 @@ namespace UI.Formularios_Hijos
                     usuarioSeleccionado.Apellido = txtApellido.Text;
                     usuarioSeleccionado.DNI = txtDNI.Text;
                     usuarioSeleccionado.Telefono = txtTelefono.Text;
-                    BLLCLiente.ActualizarCliente(usuarioSeleccionado);
+                    BLLCLiente.Modificacion(usuarioSeleccionado);
                     MessageBox.Show("Se actualizo la informacion correctamente");
                     ActualizarGrilla();
                 }

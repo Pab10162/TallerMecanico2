@@ -1,0 +1,9 @@
+C:\Proyecto-DAS\Mapper\bin\Debug\Mapper.dll
+C:\Proyecto-DAS\Mapper\bin\Debug\Mapper.pdb
+C:\Proyecto-DAS\Mapper\bin\Debug\BE.dll
+C:\Proyecto-DAS\Mapper\bin\Debug\BE.pdb
+C:\Proyecto-DAS\Mapper\obj\Debug\Mapper.csproj.AssemblyReference.cache
+C:\Proyecto-DAS\Mapper\obj\Debug\Mapper.csproj.CoreCompileInputs.cache
+C:\Proyecto-DAS\Mapper\obj\Debug\Mapper.csproj.Up2Date
+C:\Proyecto-DAS\Mapper\obj\Debug\Mapper.dll
+C:\Proyecto-DAS\Mapper\obj\Debug\Mapper.pdb

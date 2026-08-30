@@ -32,6 +32,8 @@ namespace UI.Formularios_Hijos
             dgvTurnos.DataSource = null;
             dgvTurnos.DataSource = bllTurno.ObtenerTurnos();
         }
+
+        
         private void btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -62,8 +64,7 @@ namespace UI.Formularios_Hijos
             dtpHorario.Enabled = false;
             cmbEstado.Enabled = false;
             listBox1.DataSource = new BLL_Vehiculo().obtenerVehiculos();
-            listBox2.DataSource = new BLL_Cliente().obtenerClientes();
-            listBox3.DataSource = new BLL_Usuario().obtenerUsuarios().Where(u => u is Be_Mecanico);
+            listBox3.DataSource = new BLL_Usuario().ObtenerTodos().Where(u => u is Be_Mecanico).ToList();
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
@@ -81,12 +82,7 @@ namespace UI.Formularios_Hijos
             {
                 if (modo == "Crear")
                 {
-                    if (clienteSeleccionado == null)
-                    {
-                        MessageBox.Show("Debe seleccionar un cliente");
-                        return;
-                    }
-                    else if (vehiculoSeleccionado == null)
+                    if (vehiculoSeleccionado == null)
                     {
                         MessageBox.Show("Debe seleccionar un vehiculo");
                         return;
@@ -96,7 +92,7 @@ namespace UI.Formularios_Hijos
                         MessageBox.Show("Debe seleccionar un mecanico");
                         return;
                     }
-                    BE_Turno turnoNuevo = new BE_Turno(dtpFecha.Value, dtpHorario.Value, "Pendiente", clienteSeleccionado, vehiculoSeleccionado, usuarioSeleccionado);
+                    BE_Turno turnoNuevo = new BE_Turno(dtpFecha.Value, dtpHorario.Value, "Pendiente", vehiculoSeleccionado.Cliente, vehiculoSeleccionado, usuarioSeleccionado);
                     bllTurno.CrearTurno(turnoNuevo);
                     MessageBox.Show("Turno registrado correctamente");
                     ActualizarGrilla();
@@ -104,7 +100,7 @@ namespace UI.Formularios_Hijos
             }
             catch (Exception ex)
             {
-                MessageBox.Show("ERROR" + ex.Message);
+                MessageBox.Show("ERROR" + " " + ex.Message);
             }
         }
 
@@ -112,12 +108,6 @@ namespace UI.Formularios_Hijos
         {
             vehiculoSeleccionado = listBox1.SelectedItem as BE_Vehiculo;
         }
-
-        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            clienteSeleccionado = listBox2.SelectedItem as BE_Cliente;
-        }
-
         private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
             usuarioSeleccionado = listBox3.SelectedItem as Be_Usuario;

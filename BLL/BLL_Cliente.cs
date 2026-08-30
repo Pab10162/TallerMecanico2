@@ -3,35 +3,47 @@ using DAL;
 using Servicios;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL
 {
-    public class BLL_Cliente
+    public class BLL_Cliente : IABM<BE_Cliente>, IDisposable
     {
+        private DAL_Cliente dal = new DAL_Cliente();
         public event AccionRealizadaHandler accionRealizada;
-        DAL_Cliente dal = new DAL_Cliente();
-        public void CrearCliente(BE_Cliente cliente)
+
+        // --- IABM<BE_Cliente> ---
+        public void Alta(BE_Cliente cliente)
         {
-            if(dal.obtenerClientePorDni(cliente.DNI) != null)
+            if (dal.obtenerClientePorDni(cliente.DNI) != null)
             {
                 throw new Exception("Ese DNI ya se encuentra registrado");
             }
+
             dal.CrearCliente(cliente);
-            accionRealizada?.Invoke($"Se creo cliente: {cliente.DNI}", SessionManager.GetInstance().UsuarioActual);
+            accionRealizada?.Invoke($"Se creó el cliente: {cliente.DNI}", SessionManager.GetInstance().UsuarioActual);
         }
 
-        public  List<BE_Cliente> obtenerClientes()
+        public void Baja(BE_Cliente cliente)
+        {
+            dal.EliminarCliente(cliente);
+            accionRealizada?.Invoke($"Se dio de baja al cliente: {cliente.DNI}", SessionManager.GetInstance().UsuarioActual);
+        }
+
+        public void Modificacion(BE_Cliente cliente)
+        {
+            dal.ActualizarCliente(cliente);
+            accionRealizada?.Invoke($"Se actualizó dato del cliente: {cliente.DNI}", SessionManager.GetInstance().UsuarioActual);
+        }
+
+        public List<BE_Cliente> ObtenerTodos()
         {
             return dal.ObtenerClientes();
         }
 
-        public void ActualizarCliente(BE_Cliente cliente)
+        // --- IDisposable: propaga la liberación hacia el DAL ---
+        public void Dispose()
         {
-            dal.ActualizarCliente(cliente);
-            accionRealizada?.Invoke($"Se actualizo dato del cliente: {cliente.DNI}", SessionManager.GetInstance().UsuarioActual);
+            dal?.Dispose();
         }
     }
 }

@@ -51,6 +51,8 @@
     <Compile Include="Clases\BE_Turno.cs" />
     <Compile Include="Clases\Be_Usuario.cs" />
     <Compile Include="Clases\BE_Vehiculo.cs" />
+    <Compile Include="Clases\Rol.cs" />
+    <Compile Include="Interfaces\IABM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubClases\Be_Administrador.cs" />
     <Compile Include="SubClases\Be_Cajero.cs" />

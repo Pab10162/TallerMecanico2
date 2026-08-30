@@ -1,0 +1,9 @@
+C:\Proyecto-DAS\Servicios\bin\Debug\Servicios.dll
+C:\Proyecto-DAS\Servicios\bin\Debug\Servicios.pdb
+C:\Proyecto-DAS\Servicios\bin\Debug\BE.dll
+C:\Proyecto-DAS\Servicios\bin\Debug\BE.pdb
+C:\Proyecto-DAS\Servicios\obj\Debug\Servicios.csproj.AssemblyReference.cache
+C:\Proyecto-DAS\Servicios\obj\Debug\Servicios.csproj.CoreCompileInputs.cache
+C:\Proyecto-DAS\Servicios\obj\Debug\Servicios.csproj.Up2Date
+C:\Proyecto-DAS\Servicios\obj\Debug\Servicios.dll
+C:\Proyecto-DAS\Servicios\obj\Debug\Servicios.pdb

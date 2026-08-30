@@ -28,9 +28,19 @@ namespace UI.Formularios_Hijos
             dgvVehiculo.DataSource = null;
             dgvVehiculo.DataSource = BllVehiculos.obtenerVehiculos();
         }
+
+        public void LimpiarCampos()
+        {
+            txtPatente.Text = null;
+            txtModelo.Text = null;
+            txtMarca.Text = null;
+            txtCedula.Text = null;
+        }
+
         private void btnCrear_Click(object sender, EventArgs e)
         {
             modo = "Crear";
+            LimpiarCampos();
             labelModo.Text = "Modo: Crear";
             txtCedula.Enabled = true;
             txtMarca.Enabled = true;
@@ -54,7 +64,7 @@ namespace UI.Formularios_Hijos
             txtMarca.Enabled = false;
             txtModelo.Enabled = false;
             txtPatente.Enabled = false;
-            listBox1.DataSource = new BLL_Cliente().obtenerClientes();
+            listBox1.DataSource = new BLL_Cliente().ObtenerTodos();
         }
 
         private void dgvVehiculo_SelectionChanged(object sender, EventArgs e)
@@ -84,6 +94,7 @@ namespace UI.Formularios_Hijos
                     BllVehiculos.CrearVehiculo(vehiculoNuevo);
                     MessageBox.Show("Vehiculo registrado correctamente");
                     ActualizarGrilla();
+                    LimpiarCampos();
                 }
                 else if(modo == "Modificar")
                 {
@@ -94,6 +105,7 @@ namespace UI.Formularios_Hijos
                     BllVehiculos.ActualizarVehiculo(vehiculoSeleccionado);
                     MessageBox.Show("Vehiculo actualizado correctamente");
                     ActualizarGrilla();
+                    LimpiarCampos();
                 }
             }
             catch(Exception ex) 
@@ -114,7 +126,7 @@ namespace UI.Formularios_Hijos
         private void txtBuscarCliente_TextChanged(object sender, EventArgs e)
         {
             string filtro = txtBuscarCliente.Text.ToLower();
-            var clientesFiltrados = new BLL_Cliente().obtenerClientes()
+            var clientesFiltrados = new BLL_Cliente().ObtenerTodos()
                 .Where(c => c.DNI.Contains(filtro) ||
                             c.Nombre.ToLower().Contains(filtro) ||
                             c.Apellido.ToLower().Contains(filtro))

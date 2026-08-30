@@ -26,7 +26,7 @@ namespace UI
         public void ActualizarGrilla()
         {
             dgvUsuarios.DataSource = null;
-            dgvUsuarios.DataSource = BLL_Usuario.obtenerUsuarios();
+            dgvUsuarios.DataSource = BLL_Usuario.ObtenerTodos();
             dgvUsuarios.Columns["Contraseña"].Visible = false;
             dgvUsuarios.Columns["idioma"].Visible = false;
         }
@@ -105,7 +105,7 @@ namespace UI
                 {
                     usuarioSeleccionado.Activo = true;
                 }
-                BLL_Usuario.ActualizarUsuario(usuarioSeleccionado);
+                BLL_Usuario.Modificacion(usuarioSeleccionado);
                 ActualizarGrilla();
             }
             catch (Exception ex)
@@ -124,7 +124,7 @@ namespace UI
                     }
                     usuarioSeleccionado.Bloqueado = false;
          
-                    BLL_Usuario.ActualizarUsuario(usuarioSeleccionado);
+                    BLL_Usuario.Modificacion(usuarioSeleccionado);
                     ActualizarGrilla();
                 }
                 catch (Exception ex)
@@ -165,7 +165,7 @@ namespace UI
                         MessageBox.Show("Los botones de activo y bloqueado no pueden ser iguales"); return;
                     }
 
-                    if (new BLL_Usuario().obtenerUsuarios().Any(i => i.DNI == dni))
+                    if (new BLL_Usuario().ObtenerTodos().Any(i => i.DNI == dni))
                     {
                         MessageBox.Show("No se puede ingresar usuario con ese DNI");
                         return;
@@ -202,10 +202,10 @@ namespace UI
                             throw new Exception("Rol no reconocido");
                     }
 
-                    BLL_Usuario.CrearUsuario(usuario);
+                    BLL_Usuario.Alta(usuario);
                     MessageBox.Show("Usuario creado correctamente");
                     ActualizarGrilla();
-
+                    LimpiarCampos();
                 }
                 catch (Exception ex)
                 {
@@ -224,9 +224,10 @@ namespace UI
                     usuarioSeleccionado.Nombre = txtNombre.Text;
                     usuarioSeleccionado.Apellido = txtApellido.Text;
                     usuarioSeleccionado.Rol = cmbRol.SelectedItem.ToString();
-                    BLL_Usuario.ActualizarUsuario(usuarioSeleccionado);
+                    BLL_Usuario.Modificacion(usuarioSeleccionado);
                     MessageBox.Show("Usuario modificado correctamente");
                     ActualizarGrilla();
+                    LimpiarCampos();
                 }
                 catch (Exception ex)
                 {
