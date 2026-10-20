@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace Mapper
 {
+    /// <summary>
+    /// RESPONSABILIDAD: Traducir una fila de la bitácora a BE_BitacoraEvento.
+    /// POR QUÉ EXISTE: Mismo criterio que el resto de mappers: conversión fila-objeto aislada.
+    /// QUÉ NO HACE: No accede a la base.
+    /// </summary>
     public class Mapper_Bitacora 
     {
         public BE_BitacoraEvento ToBE(DataRow fila, Be_Usuario usuario)

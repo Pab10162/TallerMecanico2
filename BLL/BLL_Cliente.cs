@@ -8,8 +8,15 @@ namespace BLL
 {
     public class BLL_Cliente : IABM<BE_Cliente>, IDisposable
     {
+        #region Datos y estado: lo que la clase recuerda mientras vive
+
         private DAL_Cliente dal = new DAL_Cliente();
+
         public event AccionRealizadaHandler accionRealizada;
+
+        #endregion
+
+        #region Operaciones públicas: reglas de negocio que expone a la UI
 
         // --- IABM<BE_Cliente> ---
         public void Alta(BE_Cliente cliente)
@@ -40,10 +47,21 @@ namespace BLL
             return dal.ObtenerClientes();
         }
 
+        public BE_Cliente ObtenerClientePorDNI(string dni)
+        {
+            return dal.obtenerClientePorDni(dni);
+        }
+
+        #endregion
+
+        #region Liberación de recursos (IDisposable)
+
         // --- IDisposable: propaga la liberación hacia el DAL ---
         public void Dispose()
         {
             dal?.Dispose();
         }
+
+        #endregion
     }
 }

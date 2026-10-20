@@ -8,16 +8,33 @@ using System.Data.SqlClient;
 
 namespace DAL
 {
+    /// <summary>
+    /// RESPONSABILIDAD: Leer y escribir usuarios en la tabla Usuarios.
+    /// POR QUÉ EXISTE: Aísla el SQL de usuarios: la BLL decide qué hacer y esta clase solo sabe cómo hacerlo en la base.
+    /// QUÉ NO HACE: No valida reglas de negocio (usuario repetido, intentos fallidos) ni cifra contraseñas. La baja es lógica (Activo = 0) para conservar historial.
+    /// </summary>
     public class DAL_Usuario : IDisposable
     {
+        #region Datos y estado: lo que la clase recuerda mientras vive
+
         private Mapper_Usuario mapper = new Mapper_Usuario();
+
         private SqlConnection conexion;
+
         private bool disposed = false;
+
+        #endregion
+
+        #region Constructores: cómo se crea y qué dependencias recibe
 
         public DAL_Usuario()
         {
             conexion = ConexionDB.ObtenerConexion();
         }
+
+        #endregion
+
+        #region Operaciones públicas: consultas y comandos contra la base de datos
 
         public void CrearUsuario(Be_Usuario usuario)
         {
@@ -149,10 +166,9 @@ namespace DAL
             }
         }
 
-        // Baja lógica: es más seguro que un DELETE porque no rompe
-        // los turnos/tareas históricos que referencian a este usuario.
         public void EliminarUsuario(Be_Usuario usuario)
         {
+            // Reflexión: "eliminar" es una baja LÓGICA (Activo = 0). Borrar la fila rompería la bitácora y se perdería el historial.
             string query = "UPDATE Usuarios SET Activo = 0 WHERE DNI = @DNI";
 
             AbrirSiCorresponde();
@@ -175,11 +191,44 @@ namespace DAL
             }
         }
 
+        public void ActualizarContraseña(string dni, string nuevaContraseñaHash)
+        {
+            string query = "UPDATE Usuarios SET Contraseña = @Contraseña WHERE DNI = @DNI";
+
+            AbrirSiCorresponde();
+            using (SqlTransaction tran = conexion.BeginTransaction())
+            {
+                try
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conexion, tran))
+                    {
+                        cmd.Parameters.AddWithValue("@DNI", dni);
+                        cmd.Parameters.AddWithValue("@Contraseña", nuevaContraseñaHash);
+                        cmd.ExecuteNonQuery();
+                    }
+                    tran.Commit();
+                }
+                catch
+                {
+                    tran.Rollback();
+                    throw;
+                } 
+            }
+        }
+
+        #endregion
+
+        #region Métodos auxiliares: apoyo interno que no forma parte de la interfaz pública
+
         private void AbrirSiCorresponde()
         {
             if (conexion.State != ConnectionState.Open)
                 conexion.Open();
         }
+
+        #endregion
+
+        #region Liberación de recursos (IDisposable)
 
         // --- Patrón IDisposable ---
         public void Dispose()
@@ -204,5 +253,7 @@ namespace DAL
         {
             Dispose(false);
         }
+
+        #endregion
     }
 }

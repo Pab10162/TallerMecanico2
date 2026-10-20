@@ -14,19 +14,69 @@ namespace UI.Formularios_Hijos
 {
     public partial class FormClientes : Form
     {
-        public FormClientes()
+        #region Datos y estado: lo que la clase recuerda mientras vive
+
+        BLL_Cliente BLLCLiente;
+
+        string modo = "Ninguno";
+
+        BE_Cliente usuarioSeleccionado;
+        string dniInicial;                                    // el DNI que trae Turnos (null si se abre desde el menú)
+        public BE_Cliente ClienteRegistrado { get; private set; }   // lo que devuelve al cerrar
+        #endregion
+
+        #region Constructores: cómo se crea y qué dependencias recibe
+
+        public FormClientes(BLL_Cliente bllCliente)
         {
             InitializeComponent();
+            BLLCLiente = bllCliente;
         }
-        string modo = "Ninguno";
-        BLL_Cliente BLLCLiente = new BLL_Cliente();
-        BE_Cliente usuarioSeleccionado;
+        public FormClientes(BLL_Cliente bllCliente, string dni) : this(bllCliente)
+        {
+            dniInicial = dni;
+        }
+        #endregion
+
+        #region Carga inicial: qué se prepara cuando se abre el formulario
+
+        private void FormClientes_Load(object sender, EventArgs e)
+        {
+            labelModo.Text = "Modo: -";
+            txtDireccion.Enabled = false;
+            txtApellido.Enabled = false;
+            txtNombre.Enabled = false;
+            txtDNI.Enabled = false;
+            txtTelefono.Enabled = false;
+            ActualizarGrilla();
+            if (dniInicial != null)
+            {
+                btnCrear_Click(this, EventArgs.Empty);
+                txtDNI.Text = dniInicial;
+                txtNombre.Focus();
+            }
+            
+        }
+
+        #endregion
+
+        #region Operaciones públicas: lo que otros formularios pueden pedirle a este
 
         public void ActualizarGrilla()
         {
             dgvClientes.DataSource = null;
             dgvClientes.DataSource = BLLCLiente.ObtenerTodos();
         }
+        public void HabilitarCampos()
+        {
+            txtNombre.Enabled = true;
+            txtTelefono.Enabled = true;
+            txtDireccion.Enabled = true;
+            txtApellido.Enabled = true;
+        }
+        #endregion
+
+        #region Botones: cada clic se traduce en una acción; las reglas de negocio viven en la BLL
 
         private void btnCrear_Click(object sender, EventArgs e)
         {
@@ -60,20 +110,34 @@ namespace UI.Formularios_Hijos
                     BE_Cliente clienteNuevo = new BE_Cliente(dni, nombre, apellido, telefono, direccion);
                     BLLCLiente.Alta(clienteNuevo);
                     MessageBox.Show("Cliente registrado correctamente");
+                    if (dniInicial != null)
+                    {
+                        ClienteRegistrado = clienteNuevo;   // el nombre de tu variable local
+                        DialogResult = DialogResult.OK;     // cierra la ventana
+                        return;
+                    }
                     ActualizarGrilla();
 
                 
                 }
                 else if (modo == "Modificar")
                 {
-                    usuarioSeleccionado.Nombre = txtNombre.Text;
-                    usuarioSeleccionado.Direccion = txtDireccion.Text;
-                    usuarioSeleccionado.Apellido = txtApellido.Text;
-                    usuarioSeleccionado.DNI = txtDNI.Text;
-                    usuarioSeleccionado.Telefono = txtTelefono.Text;
-                    BLLCLiente.Modificacion(usuarioSeleccionado);
-                    MessageBox.Show("Se actualizo la informacion correctamente");
-                    ActualizarGrilla();
+                    if (usuarioSeleccionado == null)
+                    {
+                        MessageBox.Show("Debe seleccionar un usuario para poder modificar");
+                        return;
+                    }
+                    else 
+                    {
+                        usuarioSeleccionado.Nombre = txtNombre.Text;
+                        usuarioSeleccionado.Direccion = txtDireccion.Text;
+                        usuarioSeleccionado.Apellido = txtApellido.Text;
+                        usuarioSeleccionado.DNI = txtDNI.Text;
+                        usuarioSeleccionado.Telefono = txtTelefono.Text;
+                        BLLCLiente.Modificacion(usuarioSeleccionado);
+                        MessageBox.Show("Se actualizo la informacion correctamente");
+                        ActualizarGrilla();
+                    }
                 }
             }
             catch (Exception ex)
@@ -91,32 +155,8 @@ namespace UI.Formularios_Hijos
         private void btnModificar_Click(object sender, EventArgs e)
         {
             modo = "Modificar";
+            HabilitarCampos();
             labelModo.Text = "Modo: Modificar";
-        }
-
-        private void dgvClientes_SelectionChanged(object sender, EventArgs e)
-        {
-            if(dgvClientes.SelectedRows.Count > 0)
-            {
-                usuarioSeleccionado = dgvClientes.SelectedRows[0].DataBoundItem as BE_Cliente;
-                txtApellido.Text = usuarioSeleccionado.Apellido;
-                txtNombre.Text = usuarioSeleccionado.Nombre;
-                txtDNI.Text = usuarioSeleccionado.DNI;
-                txtTelefono.Text = usuarioSeleccionado.Telefono;
-                txtDireccion.Text = usuarioSeleccionado.Direccion;
-            }
-            
-        }
-
-        private void FormClientes_Load(object sender, EventArgs e)
-        {
-            labelModo.Text = "Modo: -";
-            txtDireccion.Enabled = false;
-            txtApellido.Enabled = false;
-            txtNombre.Enabled = false;
-            txtDNI.Enabled = false;
-            txtTelefono.Enabled = false;
-            ActualizarGrilla();
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
@@ -129,5 +169,26 @@ namespace UI.Formularios_Hijos
             txtDNI.Enabled = false;
             txtTelefono.Enabled = false;
         }
+
+        #endregion
+
+        #region Eventos de controles: reaccionan a selección, texto o cambios en pantalla
+
+        private void dgvClientes_SelectionChanged(object sender, EventArgs e)
+        {
+            if(dgvClientes.SelectedRows.Count > 0)
+            {
+                if (modo == "Crear") return;
+                usuarioSeleccionado = dgvClientes.SelectedRows[0].DataBoundItem as BE_Cliente;
+                txtApellido.Text = usuarioSeleccionado.Apellido;
+                txtNombre.Text = usuarioSeleccionado.Nombre;
+                txtDNI.Text = usuarioSeleccionado.DNI;
+                txtTelefono.Text = usuarioSeleccionado.Telefono;
+                txtDireccion.Text = usuarioSeleccionado.Direccion;
+            }
+            
+        }
+
+        #endregion
     }
 }

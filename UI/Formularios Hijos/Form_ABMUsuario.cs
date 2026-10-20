@@ -14,15 +14,46 @@ using System.Windows.Forms;
 
 namespace UI
 {
+    /// <summary>
+    /// RESPONSABILIDAD: Permitir alta, modificación, baja lógica y desbloqueo de usuarios.
+    /// POR QUÉ EXISTE: Es la pantalla de administración de cuentas.
+    /// QUÉ NO HACE: No aplica las reglas de usuarios: las pide a BLL_Usuario.
+    /// </summary>
     public partial class Form_ABMUsuario : Form
     {
-        public Form_ABMUsuario()
+        #region Datos y estado: lo que la clase recuerda mientras vive
+
+        BLL_Usuario BLL_Usuario;
+
+        Be_Usuario usuarioSeleccionado;
+
+        string modo = "Ninguno";
+
+        #endregion
+
+        #region Constructores: cómo se crea y qué dependencias recibe
+
+        public Form_ABMUsuario(BLL_Usuario bllUsuario)
         {
             InitializeComponent();
+            BLL_Usuario = bllUsuario;
         }
-        BLL_Usuario BLL_Usuario = new BLL_Usuario();
-        Be_Usuario usuarioSeleccionado;
-        string modo = "Ninguno";
+
+        #endregion
+
+        #region Carga inicial: qué se prepara cuando se abre el formulario
+
+        private void Form_ABMUsuario_Load(object sender, EventArgs e)
+        {
+            ActualizarGrilla();
+            panelCampos.Enabled = false;
+            labelModo.Text = "Modo: -";
+        }
+
+        #endregion
+
+        #region Operaciones públicas: lo que otros formularios pueden pedirle a este
+
         public void ActualizarGrilla()
         {
             dgvUsuarios.DataSource = null;
@@ -30,6 +61,7 @@ namespace UI
             dgvUsuarios.Columns["Contraseña"].Visible = false;
             dgvUsuarios.Columns["idioma"].Visible = false;
         }
+
         public void LimpiarCampos()
         {
             txtApellido.Text = null;
@@ -40,6 +72,11 @@ namespace UI
             ckbActivo.Checked = false;
             ckbBloqueado.Checked = false;
         }
+
+        #endregion
+
+        #region Botones: cada clic se traduce en una acción; las reglas de negocio viven en la BLL
+
         private void btnCrear_Click(object sender, EventArgs e)
         {
             modo = "Crear";
@@ -50,29 +87,6 @@ namespace UI
             txtEmail.Enabled = true;
         }
 
-        private void Form_ABMUsuario_Load(object sender, EventArgs e)
-        {
-            ActualizarGrilla();
-            panelCampos.Enabled = false;
-            labelModo.Text = "Modo: -";
-        }
-
-        private void dgvUsuarios_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dgvUsuarios.SelectedRows.Count > 0)
-            {
-                usuarioSeleccionado = dgvUsuarios.SelectedRows[0].DataBoundItem as Be_Usuario;
-                txtApellido.Text = usuarioSeleccionado.Apellido.ToString();
-                txtNombre.Text = usuarioSeleccionado.Nombre.ToString();
-                txtEmail.Text = usuarioSeleccionado.Email.ToString();
-                txtDNI.Text = usuarioSeleccionado.DNI.ToString();
-                txtEmail.Enabled = false;
-                txtDNI.Enabled = false;
-                cmbRol.Text = usuarioSeleccionado.Rol.ToString();
-                ckbActivo.Checked = usuarioSeleccionado.Activo;
-                ckbBloqueado.Checked = usuarioSeleccionado.Bloqueado;
-            }
-        }
         //No debe poderse modificar el mail o dni del usuario
         private void btnModificar_Click(object sender, EventArgs e)
         {
@@ -113,6 +127,7 @@ namespace UI
                 MessageBox.Show(ex.Message);
             }
         }
+
             private void btnDesbloquear_Click(object sender, EventArgs e)
             {
                 try
@@ -246,6 +261,29 @@ namespace UI
             txtEmail.Enabled = false;
             usuarioSeleccionado = null;
         }
+
+        #endregion
+
+        #region Eventos de controles: reaccionan a selección, texto o cambios en pantalla
+
+        private void dgvUsuarios_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvUsuarios.SelectedRows.Count > 0)
+            {
+                usuarioSeleccionado = dgvUsuarios.SelectedRows[0].DataBoundItem as Be_Usuario;
+                txtApellido.Text = usuarioSeleccionado.Apellido.ToString();
+                txtNombre.Text = usuarioSeleccionado.Nombre.ToString();
+                txtEmail.Text = usuarioSeleccionado.Email.ToString();
+                txtDNI.Text = usuarioSeleccionado.DNI.ToString();
+                txtEmail.Enabled = false;
+                txtDNI.Enabled = false;
+                cmbRol.Text = usuarioSeleccionado.Rol.ToString();
+                ckbActivo.Checked = usuarioSeleccionado.Activo;
+                ckbBloqueado.Checked = usuarioSeleccionado.Bloqueado;
+            }
+        }
+
+        #endregion
     }
 
 }

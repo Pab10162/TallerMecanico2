@@ -48,6 +48,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackUpRestore\Form_BackupRestore.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BackUpRestore\Form_BackupRestore.Designer.cs">
+      <DependentUpon>Form_BackupRestore.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios Hijos\FormBitacoraEvento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios Hijos\FormBitacoraEvento.Designer.cs">
+      <DependentUpon>FormBitacoraEvento.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios Hijos\FormCambioContraseña.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios Hijos\FormCambioContraseña.Designer.cs">
+      <DependentUpon>FormCambioContraseña.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formularios Hijos\FormClientes.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +104,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="BackUpRestore\Form_BackupRestore.resx">
+      <DependentUpon>Form_BackupRestore.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios Hijos\FormBitacoraEvento.resx">
+      <DependentUpon>FormBitacoraEvento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios Hijos\FormCambioContraseña.resx">
+      <DependentUpon>FormCambioContraseña.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios Hijos\FormClientes.resx">
       <DependentUpon>FormClientes.cs</DependentUpon>
     </EmbeddedResource>
@@ -122,6 +149,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Recursos\en.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Recursos\es.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -144,5 +177,6 @@
       <Name>Servicios</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

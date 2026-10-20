@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace BE.SubClases
 {
+    /// <summary>
+    /// RESPONSABILIDAD: Representar al cajero (cobros).
+    /// POR QUÉ EXISTE: El rol determina qué menús ve el usuario; cada rol es un tipo propio para poder preguntar "usuario is Be_Cajero" sin comparar strings.
+    /// QUÉ NO HACE: No tiene comportamiento propio todavía: hoy solo distingue el tipo. Si un rol necesitara reglas particulares, vivirían acá.
+    /// </summary>
     public class Be_Cajero : Be_Usuario
     {
         public Be_Cajero(string dni, string nombre, string apellido, string email,

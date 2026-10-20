@@ -5,6 +5,11 @@ using System.Data;
 
 namespace Mapper
 {
+    /// <summary>
+    /// RESPONSABILIDAD: Traducir una fila (DataRow) de Usuarios a la subclase de Be_Usuario que corresponde a su rol.
+    /// POR QUÉ EXISTE: El DAL no debería conocer cómo se construye cada objeto, y el BE no debería conocer DataRow. El Mapper es el puente.
+    /// QUÉ NO HACE: No ejecuta consultas ni valida datos.
+    /// </summary>
     public class Mapper_Usuario
     {
         

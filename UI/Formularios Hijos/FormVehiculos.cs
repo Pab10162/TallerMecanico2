@@ -12,21 +12,72 @@ using BLL;
 
 namespace UI.Formularios_Hijos
 {
+    /// <summary>
+    /// RESPONSABILIDAD: Alta, modificación y consulta de vehículos; asocia cada vehículo a su cliente propietario.
+    /// POR QUÉ EXISTE: Mismo criterio que FormClientes: una sola pantalla de alta que más adelante Turnos podrá reutilizar.
+    /// QUÉ NO HACE: Delega en BLL_Vehiculo; no contiene reglas de negocio ni SQL.
+    /// </summary>
     public partial class FormVehiculos : Form
     {
-        public FormVehiculos()
+        #region Datos y estado: lo que la clase recuerda mientras vive
+
+        BLL_Vehiculo BllVehiculos;
+
+        string modo = "Ninguno";
+
+        BE_Vehiculo vehiculoSeleccionado;
+
+        BE_Cliente clienteSeleccionado;
+        BE_Cliente clienteFijo;                                   // el cliente que trae Turnos (null si se abre desde el menú)
+        public BE_Vehiculo VehiculoRegistrado { get; private set; }
+
+        #endregion
+
+        #region Constructores: cómo se crea y qué dependencias recibe
+
+        public FormVehiculos(BLL_Vehiculo bllVehiculo)
         {
             InitializeComponent();
+            BllVehiculos = bllVehiculo;
         }
-        string modo = "Ninguno";
-        BE_Vehiculo vehiculoSeleccionado;
-        BLL_Vehiculo BllVehiculos = new BLL_Vehiculo();
-        BE_Cliente clienteSeleccionado;
+
+        public FormVehiculos(BLL_Vehiculo bllVehiculo, BE_Cliente cliente) : this(bllVehiculo)
+        {
+            clienteFijo = cliente;
+        }
+        #endregion
+
+        #region Carga inicial: qué se prepara cuando se abre el formulario
+
+        private void FormVehiculos_Load(object sender, EventArgs e)
+        {
+            ActualizarGrilla();
+            txtCedula.Enabled = false;
+            txtMarca.Enabled = false;
+            txtModelo.Enabled = false;
+            txtPatente.Enabled = false;
+            if (clienteFijo == null)
+            {
+                listBox1.DataSource = new BLL_Cliente().ObtenerTodos();
+            }
+            else
+            {
+                btnCrear_Click(this, EventArgs.Empty);
+                clienteSeleccionado = clienteFijo;
+                listBox1.Enabled = false;
+                txtBuscarCliente.Enabled = false;
+                txtPatente.Focus();
+            }
+        }
+
+        #endregion
+
+        #region Operaciones públicas: lo que otros formularios pueden pedirle a este
 
         public void ActualizarGrilla()
         {
             dgvVehiculo.DataSource = null;
-            dgvVehiculo.DataSource = BllVehiculos.obtenerVehiculos();
+            dgvVehiculo.DataSource = BllVehiculos.ObtenerTodos();
         }
 
         public void LimpiarCampos()
@@ -36,6 +87,10 @@ namespace UI.Formularios_Hijos
             txtMarca.Text = null;
             txtCedula.Text = null;
         }
+
+        #endregion
+
+        #region Botones: cada clic se traduce en una acción; las reglas de negocio viven en la BLL
 
         private void btnCrear_Click(object sender, EventArgs e)
         {
@@ -48,34 +103,12 @@ namespace UI.Formularios_Hijos
             txtPatente.Enabled = true;
         }
 
-
         private void btnModificar_Click(object sender, EventArgs e)
         {
             if (vehiculoSeleccionado != null)
             {
                 modo = "Modificar";
                 labelModo.Text = "Modo: Modificar";
-            }
-        }
-        private void FormVehiculos_Load(object sender, EventArgs e)
-        {
-            ActualizarGrilla();
-            txtCedula.Enabled = false;
-            txtMarca.Enabled = false;
-            txtModelo.Enabled = false;
-            txtPatente.Enabled = false;
-            listBox1.DataSource = new BLL_Cliente().ObtenerTodos();
-        }
-
-        private void dgvVehiculo_SelectionChanged(object sender, EventArgs e)
-        {
-            if(dgvVehiculo.SelectedRows.Count > 0)
-            {
-                vehiculoSeleccionado = dgvVehiculo.SelectedRows[0].DataBoundItem as BE_Vehiculo;
-                txtPatente.Text = vehiculoSeleccionado.Patente;
-                txtModelo.Text = vehiculoSeleccionado.Modelo;
-                txtMarca.Text = vehiculoSeleccionado.Marca;
-                txtCedula.Text = vehiculoSeleccionado.Cedula;
             }
         }
 
@@ -91,7 +124,13 @@ namespace UI.Formularios_Hijos
                         return;
                     }
                     BE_Vehiculo vehiculoNuevo = new BE_Vehiculo(txtMarca.Text, txtModelo.Text, txtPatente.Text, txtCedula.Text, clienteSeleccionado);
-                    BllVehiculos.CrearVehiculo(vehiculoNuevo);
+                    BllVehiculos.Alta(vehiculoNuevo);
+                    if (clienteFijo != null)
+                    {
+                        VehiculoRegistrado = vehiculoNuevo;
+                        DialogResult = DialogResult.OK;
+                        return;
+                    }
                     MessageBox.Show("Vehiculo registrado correctamente");
                     ActualizarGrilla();
                     LimpiarCampos();
@@ -102,7 +141,7 @@ namespace UI.Formularios_Hijos
                     vehiculoSeleccionado.Modelo = txtModelo.Text;
                     vehiculoSeleccionado.Patente = txtPatente.Text;
                     vehiculoSeleccionado.Marca = txtMarca.Text;
-                    BllVehiculos.ActualizarVehiculo(vehiculoSeleccionado);
+                    BllVehiculos.Modificacion(vehiculoSeleccionado);
                     MessageBox.Show("Vehiculo actualizado correctamente");
                     ActualizarGrilla();
                     LimpiarCampos();
@@ -118,6 +157,33 @@ namespace UI.Formularios_Hijos
         {
             this.Close();
         }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            modo = "Ninguno";
+            labelModo.Text = "Modo: -";
+            txtCedula.Enabled = false;
+            txtMarca.Enabled = false;
+            txtModelo.Enabled = false;
+            txtPatente.Enabled = false;
+        }
+
+        #endregion
+
+        #region Eventos de controles: reaccionan a selección, texto o cambios en pantalla
+
+        private void dgvVehiculo_SelectionChanged(object sender, EventArgs e)
+        {
+            if(dgvVehiculo.SelectedRows.Count > 0)
+            {
+                vehiculoSeleccionado = dgvVehiculo.SelectedRows[0].DataBoundItem as BE_Vehiculo;
+                txtPatente.Text = vehiculoSeleccionado.Patente;
+                txtModelo.Text = vehiculoSeleccionado.Modelo;
+                txtMarca.Text = vehiculoSeleccionado.Marca;
+                txtCedula.Text = vehiculoSeleccionado.Cedula;
+            }
+        }
+
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             clienteSeleccionado = listBox1.SelectedItem as BE_Cliente;
@@ -134,14 +200,6 @@ namespace UI.Formularios_Hijos
             listBox1.DataSource = clientesFiltrados;
         }
 
-        private void btnCancelar_Click(object sender, EventArgs e)
-        {
-            modo = "Ninguno";
-            labelModo.Text = "Modo: -";
-            txtCedula.Enabled = false;
-            txtMarca.Enabled = false;
-            txtModelo.Enabled = false;
-            txtPatente.Enabled = false;
-        }
+        #endregion
     }
 }

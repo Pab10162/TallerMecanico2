@@ -14,18 +14,33 @@ using System.Xml.Linq;
 
 namespace DAL
 {
+    /// <summary>
+    /// RESPONSABILIDAD: Leer y escribir clientes en la tabla Clientes.
+    /// POR QUÉ EXISTE: Mantiene el SQL fuera de la BLL y la UI.
+    /// QUÉ NO HACE: No decide si un DNI es válido ni si el cliente ya existe: eso es de la BLL.
+    /// </summary>
     public class DAL_Cliente : IDisposable
     {
+        #region Datos y estado: lo que la clase recuerda mientras vive
 
         private Mapper_Cliente mapper = new Mapper_Cliente();
+
         private SqlConnection conexion;
+
         private bool disposed = false;
 
+        #endregion
+
+        #region Constructores: cómo se crea y qué dependencias recibe
 
         public DAL_Cliente()
         {
             conexion = ConexionDB.ObtenerConexion();
         }
+
+        #endregion
+
+        #region Operaciones públicas: consultas y comandos contra la base de datos
 
         public void CrearCliente(BE_Cliente cliente)
         {
@@ -60,7 +75,7 @@ namespace DAL
                 }
             }
         }
-        
+
         public List<BE_Cliente> ObtenerClientes()
         {
             string query = @"SELECT DNI, Nombre, Apellido, Telefono, Direccion FROM Clientes";
@@ -149,6 +164,9 @@ namespace DAL
             }
         }
 
+        #endregion
+
+        #region Métodos auxiliares: apoyo interno que no forma parte de la interfaz pública
 
         private void AbrirSiCorresponde()
         {
@@ -156,12 +174,17 @@ namespace DAL
                 conexion.Open();
         }
 
+        #endregion
+
+        #region Liberación de recursos (IDisposable)
+
         // --- Patrón IDisposable ---
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         protected virtual void Dispose(bool disposing)
         {
             if (disposed) return;
@@ -173,9 +196,12 @@ namespace DAL
             }
             disposed = true;
         }
+
         ~DAL_Cliente()
         {
             Dispose(false);
         }
+
+        #endregion
     }
 }

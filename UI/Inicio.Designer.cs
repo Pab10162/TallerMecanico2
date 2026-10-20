@@ -125,15 +125,16 @@
             // usuariosToolStripMenuItem
             // 
             this.usuariosToolStripMenuItem.Name = "usuariosToolStripMenuItem";
-            this.usuariosToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.usuariosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.usuariosToolStripMenuItem.Text = "Usuarios";
             this.usuariosToolStripMenuItem.Click += new System.EventHandler(this.usuariosToolStripMenuItem_Click);
             // 
             // bitacoraToolStripMenuItem
             // 
             this.bitacoraToolStripMenuItem.Name = "bitacoraToolStripMenuItem";
-            this.bitacoraToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.bitacoraToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.bitacoraToolStripMenuItem.Text = "Bitacora";
+            this.bitacoraToolStripMenuItem.Click += new System.EventHandler(this.bitacoraToolStripMenuItem_Click);
             // 
             // clientesToolStripMenuItem
             // 
@@ -201,6 +202,7 @@
             this.cobrosToolStripMenuItem.Name = "cobrosToolStripMenuItem";
             this.cobrosToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.cobrosToolStripMenuItem.Text = "Cobros";
+            this.cobrosToolStripMenuItem.Click += new System.EventHandler(this.cobrosToolStripMenuItem_Click);
             // 
             // cobrosToolStripMenuItem1
             // 

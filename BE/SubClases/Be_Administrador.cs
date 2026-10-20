@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace BE.SubClases
 {
+    /// <summary>
+    /// RESPONSABILIDAD: Representar al administrador del sistema (ABM de usuarios, bitácora, backup).
+    /// POR QUÉ EXISTE: El rol determina qué menús ve el usuario; cada rol es un tipo propio para poder preguntar "usuario is Be_Administrador" sin comparar strings.
+    /// QUÉ NO HACE: No tiene comportamiento propio todavía: hoy solo distingue el tipo. Si un rol necesitara reglas particulares, vivirían acá.
+    /// </summary>
     public class Be_Administrador : Be_Usuario
     {
         public Be_Administrador(string dni, string nombre, string apellido, string email,

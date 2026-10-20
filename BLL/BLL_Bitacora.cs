@@ -10,6 +10,11 @@ using Servicios;
 
 namespace BLL
 {
+    /// <summary>
+    /// RESPONSABILIDAD: Registrar y consultar eventos de la bitácora.
+    /// POR QUÉ EXISTE: Es el destino del Observer: Inicio escucha las acciones de las demás BLL y las manda acá.
+    /// QUÉ NO HACE: No decide qué se audita.
+    /// </summary>
     public class BLL_Bitacora
     {
         DAL_BitacoraEvento dal = new DAL_BitacoraEvento();
@@ -17,9 +22,9 @@ namespace BLL
         {
             dal.RegistrarEvento(evento);
         }
-        public void ObtenerEventos()
+        public List<BE_BitacoraEvento> ObtenerEventos()
         {
-            dal.ObtenerEventos();
+            return dal.ObtenerEventos();
         }
 
     }

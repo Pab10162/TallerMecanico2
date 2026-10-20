@@ -7,10 +7,29 @@ using BE;
 
 namespace Servicios
 {
+    /// <summary>
+    /// RESPONSABILIDAD: Contar los intentos fallidos de login por usuario (Singleton).
+    /// POR QUÉ EXISTE: El conteo debe sobrevivir entre varios intentos de login durante la ejecución, por eso es una única instancia.
+    /// QUÉ NO HACE: No bloquea al usuario: BLL_Usuario decide el bloqueo cuando el contador llega a 3. El conteo se pierde al cerrar la aplicación.
+    /// </summary>
     public class ControlIntentos
     {
-        private static ControlIntentos Instancia; 
+        #region Datos y estado: lo que la clase recuerda mientras vive
+
+        private static ControlIntentos Instancia;
+
         public List<IntentosFallidos> CantFallidos = new List<IntentosFallidos>();
+
+        #endregion
+
+        #region Constructores: cómo se crea y qué dependencias recibe
+
+        private ControlIntentos() { }
+
+        #endregion
+
+        #region Operaciones públicas: servicio transversal usado por todas las capas
+
         public static ControlIntentos GetInstance()
         {
             if(Instancia == null)
@@ -19,7 +38,6 @@ namespace Servicios
             }
             return Instancia;
         }
-        private ControlIntentos() { }
 
         public void RegistrarIntentos(string nombreUsuario)
         {
@@ -42,6 +60,7 @@ namespace Servicios
                 encontrado.Cantidad = 0;
             }
         }
+
         public int ObtenerCantidadIntentos(string nombreUsuario)
         {
             var encontrado = CantFallidos.FirstOrDefault(i => i.NombreUsuario == nombreUsuario);
@@ -51,5 +70,7 @@ namespace Servicios
             }
             return 0;
         }
+
+        #endregion
     }
 }

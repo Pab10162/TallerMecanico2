@@ -11,11 +11,16 @@ using Mapper;
 
 namespace DAL
 {
+    /// <summary>
+    /// RESPONSABILIDAD: Persistir y consultar los eventos de la bitácora.
+    /// POR QUÉ EXISTE: Separa el almacenamiento de la auditoría de las clases que generan los eventos.
+    /// QUÉ NO HACE: No decide qué eventos se registran.
+    /// </summary>
     public class DAL_BitacoraEvento
     {
         Mapper_Bitacora mapper = new Mapper_Bitacora();
         public void RegistrarEvento(BE_BitacoraEvento evento)
-        {
+        {       
             string query = "INSERT INTO BitacoraEventos(Fecha, Horario, DNI_Usuario, Evento) VALUES (@Fecha, @Horario, @DNI_Usuario, @Evento)";
 
             SqlParameter[] sp = new SqlParameter[]
